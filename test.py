@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from raw_dataset import RawImgDataset
 from sensor_pixel_autoencoder import SensorPixelEncoder, SensorPixelDecoder
 
+from train import TrainCheckPoint
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -43,8 +44,8 @@ def test(dataset: RawImgDataset, checkpoint: dict = None):
     decoder = SensorPixelDecoder(obs_shape, encoder_config=encoder.config).to(DEVICE)
 
     if checkpoint is not None:
-        load_model(encoder, checkpoint["encoder"])
-        load_model(decoder, checkpoint["decoder"])
+        load_model(encoder, checkpoint.encoder)
+        load_model(decoder, checkpoint.decoder)
     
     encoder.eval()
     decoder.eval()
@@ -62,14 +63,14 @@ def test(dataset: RawImgDataset, checkpoint: dict = None):
         
 
 if __name__ == "__main__":
-    dataset_path = Path(r'C:%USERPROFILE%\Workspace\Zurich-RAW-to-DSLR-Dataset\test\huawei_raw')
-
-    checkpoint = {
-        "encoder": Path("./model_data/encoder_epoch_8.pt"),
-        "decoder": Path("./model_data/decoder_epoch_8.pt"),
-        "loss_trace": Path("./model_data/loss_trace_epoch_8.npy"),
-        "epoch": 8
-    }
-
+    dataset_path = Path.home() / Path('/Workspace/Zurich-RAW-to-DSLR-Dataset/test/huawei_raw')
     ds = RawImgDataset(dataset_path)
+
+    checkpoint = TrainCheckPoint(
+        encoder=Path("./model_data/encoder_epoch_10.pt"),
+        decoder=Path("./model_data/decoder_epoch_10.pt"),
+        loss_trace=Path("./model_data/loss_trace_epoch_10.npy"),
+        epoch=10
+    )
+
     test(ds, checkpoint=checkpoint)
