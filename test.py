@@ -10,10 +10,10 @@ from torch.utils.data import DataLoader
 
 import matplotlib.pyplot as plt
 
-from raw_dataset import RawImgDataset
-from sensor_pixel_autoencoder import SensorPixelEncoder, SensorPixelDecoder
+from .raw_dataset import RawImgDataset
+from .sensor_pixel_autoencoder import SensorPixelEncoder, SensorPixelDecoder
 
-from train import TrainCheckPoint
+from .train import TrainCheckPoint
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
